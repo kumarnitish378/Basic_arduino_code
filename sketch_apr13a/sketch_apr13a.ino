@@ -1,4 +1,4 @@
- #include<Math.h>
+#include<math.h>
 
 #include <Servo.h>
 static const int servosPins[4] = {32 , 18 , 14, 4};
@@ -8,15 +8,7 @@ Servo servos[4];
 float m1 = 20;
 float m2 = 10;
 float m3 = 100;
-int thetaIn[3] = {10, 20, 60};
-int thetaFinal[3]; // = {90, 10, 90};
 
-int m1_max = 90;
-int m2_max = 90;
-int m3_max = 90;
-int sta = 0;
-
-int tm1, tm2, tm3;
 void setup()
 {
   pinMode(stepPin, OUTPUT);
@@ -36,47 +28,47 @@ void setup()
 
 void loop()
 {
-  //ArmMovement(Servo_m1_agle, Servo_m2_agle, Servo_m3_agle);
-  while(Serial.available()>0)
-  {
-   String Data = Serial.readString();
-   HH(Data);
-    }
+  ArmMovement(10, 20, 30);
+  ArmMovement(60, 0, 60);
+  ArmMovement(120, 30, 120);
+  ArmMovement(150, 0, 180);
+  ArmMovement(160, 30, 30);
+  ArmMovement(180, 0, 0);
+  ArmMovement(110, 160, 120);
+  clockwise();
+  clockwise();
+  ArmMovement(120, 180, 20);
+  ArmMovement(60, 120, 160);
+  anticlockwise();
+  anticlockwise();
+  ArmMovement(120, 180, 20);
+  ArmMovement(60, 120, 160);
+  clockwise();
+  clockwise();
+  ArmMovement(120, 180, 20);
+  ArmMovement(100, 90, 90);
+  anticlockwise();
+  anticlockwise();
+   ArmMovement(40, 180, 150);
+  ArmMovement(140, 0, 0);
+  ArmMovement(100, 90, 90);
+   ArmMovement(40, 180, 150);
+  ArmMovement(140, 0, 0);
+  ArmMovement(100, 90, 90);
+   ArmMovement(40, 180, 150);
+   ArmMovement(140, 0, 0);
+   ArmMovement(100, 90, 90);
+   ArmMovement(40, 20, 100);
 }
-//......................................................
-void HH(String Data)
-{
-  String input = Data;
-  int si = 3; // Number of angle
-  int angle[si];
- 
-  int count = 0, st = 0;
-  for (int i = 0; i < input.length(); i++)
-  {
-    if (input.substring(i, i + 1) == ",")
-    {
-      angle[count] = input.substring(st, i).toInt();
-      count += 1;
-      st = i+1;
-    }
-  }
-  Serial.print("Theta 1: ");
-  Serial.println(angle[0]);
-  Serial.print("Theta 2: ");
-  Serial.println(angle[1]);
-  Serial.print("Theta 3: ");
-  Serial.println(angle[2]);
-  ArmMovement(angle[0], angle[1], angle[2]);
-}
-//................................................................................
+
 void ArmMovement(int theta1, int theta2, int theta3)
 {
     float f1 = theta1;
     float f2 = theta2;
     float f3 = theta3;
     // float d1 = (f1-m1)/(f2-m1), d2 = (f2-m2)/(f2-m1), d3 = (f3-m3)/(f2-m1);
-    int f = 300;
-    int m = 5;  // f will be maximum value of all Angle, and x will we smallest Angle of all angle
+    int f = 180;
+    int m = 20;  // f will be maximum value of all Angle, and x will we smallest Angle of all angle
     float d1 = (f1-m1)/(f-m);
     float d2 = (f2-m2)/(f-m);
     float d3 = (f3-m3)/(f-m);
@@ -109,48 +101,32 @@ void ArmMovement(int theta1, int theta2, int theta3)
   m1 = round(ang1);
   m2 = round(ang2);
   m3 = round(ang3);
-  delay(1000);
+  delay(500);
 }
-//............................................
-//---------clockwise Steper motor------------
-
 void clockwise()
 {
-  int stepsPerRevolution = 100;
+  int stepsPerRevolution = 800;
   digitalWrite(dirPin, HIGH);
   for (int i = 0; i < stepsPerRevolution; i++)
   {
     digitalWrite(stepPin, HIGH);
-    delayMicroseconds(4000);
+    delayMicroseconds(500);
     digitalWrite(stepPin, LOW);
-    delayMicroseconds(4000);
+    delayMicroseconds(500);
   }
 }
 
 //---------Anticlockwise Steper motor------------
 
-void anticlockwise()
+void anticlockwise()  
 {
-  int stepsPerRevolution = 100;
+  int stepsPerRevolution = 800;
   digitalWrite(dirPin, LOW);
   for (int i = 0; i < stepsPerRevolution; i++)
   {
     digitalWrite(stepPin, HIGH);
-    delayMicroseconds(4000);
+    delayMicroseconds(500);
     digitalWrite(stepPin, LOW);
-    delayMicroseconds(4000);
+    delayMicroseconds(500);
   }
-}
-//..............pick,drop................................
-void pick()
-{
-    servos[3].write(150);
-    delay(2000);
-    servos[3].write(30);
-    delay(500);
-}
-void drop()
-{
-    servos[3].write(150);
-    delay(500);
 }
